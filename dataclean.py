@@ -1,0 +1,17 @@
+import pandas as pd
+df = pd.read_csv("D:\Python\SalmonandSeaTroutNets1952-2022.csv")
+print("First 5 Rows")
+print(df.head())
+print("\nMissing Values:")
+print(df.isnull().sum())
+df = df.fillna(0)
+df = df.drop_duplicates()
+df = df.rename(columns={"Year": "Fishing_Year"})
+numeric_cols = df.select_dtypes(include="number")
+df["Total_Catch"] = numeric_cols.sum(axis=1)
+high_catch = df[df["Total_Catch"] > 10000]
+print("\nHigh Catch Years:")
+print(high_catch[["Fishing_Year", "Total_Catch"]])
+sorted_data = df.sort_values(by="Total_Catch", ascending=False)
+print("\nTop 5 Highest Catch Years:")
+print(sorted_data[["Fishing_Year", "Total_Catch"]].head())
